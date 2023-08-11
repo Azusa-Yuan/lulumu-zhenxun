@@ -1,4 +1,4 @@
-# openai账号
+# openai账号 proxy不用时请注释
 email:
 password:
-proxy:
+#proxy:

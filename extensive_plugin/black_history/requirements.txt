@@ -1,0 +1,2 @@
+pytesseract
+nonebot-plugin-imageutils
