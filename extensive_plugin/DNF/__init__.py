@@ -84,6 +84,7 @@ def DNFExRateTrend_(server, path):
     if server not in ReportRegions:
         return False
     url_1 = "https://www.yxdr.com/bijiaqi/dnf/maodundejiejingti/hangqing"
+    # BeautifulSoup html解析器
     soup = BeautifulSoup(requests.get(url=url_1).text, 'html.parser')
     scripts = soup.find("body").find_all("script")
     url_2 = "https://www.yxdr.com/report/dnf/" + scripts[7]["src"].split('/')[-1]
@@ -93,24 +94,32 @@ def DNFExRateTrend_(server, path):
     x = []
     y = [[] for i in SiteChoices]
 
+    # 数据格式 [230729, 30, 0.01455] 日期 网站编号 比例
+    same = 0
     for single_data in raw_data:
-        if single_data[0] not in x:
-            x.append(single_data[0])
+        if single_data[0] != same:
+            single_data_tmp = single_data[0]
+            same = single_data_tmp
+            x_tmp = str(single_data_tmp // 10000) + '-'
+            single_data_tmp = single_data_tmp % 10000
+            x_tmp = x_tmp + str(single_data_tmp // 100) + '-'
+            single_data_tmp = single_data_tmp % 100
+            x_tmp = x_tmp + str(single_data_tmp)
+            x.append(x_tmp)
         if single_data[1] in SiteChoices:
             single_data[2] = 1 / single_data[2]
             y[SiteChoices.index(single_data[1])].append(single_data[2])
 
-    maxLen = len(x)
-
     plt.clf()
-    # 做一个平均的填充
-    y = [line + [sum(line) / len(line)] * (maxLen - len(line)) for line in y]
+    plt.figure(figsize=(8, 6))
 
     # 绘制多条折线图
     for line in y:
-        plt.plot(x, savgol_filter(line, window_length=len(line), polyorder=4))
+        plt.plot(x, line)
+        # plt.plot(x, savgol_filter(line, window_length=len(line), polyorder=7))
 
     # 添加标题和坐标轴标签
+    plt.xticks(rotation=45)
     plt.title('DNF Exchange Rate')
     plt.xlabel('Time')
     plt.ylabel('Exchange Rate')

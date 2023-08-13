@@ -22,7 +22,6 @@ from nonebot.adapters.onebot.v11.permission import (
     PRIVATE_FRIEND,
 )
 
-require("nonebot_plugin_imageutils")
 from nonebot_plugin_imageutils import BuildImage, Text2Image
 
 from .utils import Meme
