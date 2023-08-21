@@ -2,7 +2,6 @@ from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent, Message, Message
 import requests
 from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
-from scipy.signal import savgol_filter
 from nonebot import require, on_command, on_message
 from configs.path_config import IMAGE_PATH
 from nonebot.params import CommandArg
