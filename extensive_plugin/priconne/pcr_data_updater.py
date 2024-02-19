@@ -63,7 +63,7 @@ async def _():
     bot = get_bot()
     await pull_chara(bot)
 
-group_id_list = ["852670048", "522392057", "639706264"]
+group_id_list = ["852670048", "233711588"]
 @scheduler.scheduled_job(
     "cron",
     hour=23,

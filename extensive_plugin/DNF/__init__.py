@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium import webdriver
+from utils.utils import scheduler, get_bot
 
 __zx_plugin_name__ = "DNF"
 __plugin_usage__ = """
@@ -73,6 +74,7 @@ SiteChoices = [17, 40, 44]
 DNFExRateTrend = on_command("比例趋势", priority=5, block=True)
 DNFExRate = on_command("DNF比例", aliases={"比例", "游戏币比例", "游戏币", "金币"}, priority=5, block=True)
 DNFMaodun = on_command("矛盾", priority=5, block=True)
+colg_zixun = on_command("colg资讯", priority=5, block=True)
 
 tmpDNFExRateTrendPath = IMAGE_PATH / "DNFExRateTrend.png"
 tmpDNFExRatePath = IMAGE_PATH / "DNFExRateTrend.png"
@@ -193,3 +195,53 @@ async def _(event: MessageEvent, arg: Message = CommandArg()):
     if base64_data == None:
         return
     await DNFMaodun.finish(image("base64://"+base64_data) + url)
+
+async def colg():
+    limit = 6
+    base_url = "https://bbs.colg.cn/"
+    url = "https://bbs.colg.cn/home.php?mod=space&uid=4120473"
+    # BeautifulSoup html解析器
+    soup = BeautifulSoup(requests.get(url=url).text, 'html.parser')
+    lis = soup.find("div", {"id": "thread_content"}).find_all("li")
+    context = ""
+    for li in lis[: limit]:
+        context += li.text + '\r\n'
+        context += base_url + li.find("a").get("href") + '\r\n'
+    context += "仅供参考"
+    return context
+
+init_contex = None
+group_id_list = ["852670048", "233711588"]
+qq_id_list = ["1043728417", "1521039037"]
+
+
+@colg_zixun.handle()
+async def _(event: MessageEvent, arg: Message = CommandArg()):
+    context = await colg()
+    await colg_zixun.finish(context)
+
+
+@scheduler.scheduled_job(
+    "interval",
+    minutes=3,
+)
+async def __():
+    global init_contex
+    global group_id_list
+    global qq_id_list
+    bot = get_bot()
+    if init_contex is None:
+        init_contex = await colg()
+
+    context = await colg()
+
+    if context != init_contex:
+        init_contex = context
+        context = "colg资讯已更新:\r\n" + str(context)
+        for group_id in group_id_list:
+            await bot.send_group_msg(group_id=group_id, message=context)
+        for user_id in qq_id_list:
+            await bot.send_private_msg(
+                user_id=user_id,
+                message=context
+            )
