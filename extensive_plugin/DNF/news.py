@@ -23,6 +23,7 @@ async def colg(url):
         context += base_url + li.find("a").get("href") + '\r\n'
     return context, lis[0].text
 
+
 async def colg_news():
     context = ""
     for url in url_list:
