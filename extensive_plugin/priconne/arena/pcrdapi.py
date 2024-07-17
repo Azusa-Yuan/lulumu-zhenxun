@@ -25,6 +25,7 @@ def _getTs():
 def _dumps(x):
     return dumps(x, ensure_ascii=False).replace(' ', '')
 
+# CDLL 是 Python 中 ctypes 模块提供的一个函数，用于加载动态链接库（DLL 或共享库）。 .getSign 看起来是调用这个动态链接库中的一个函数或方法
 _dllname = join(dirname(__file__), 'libpcrdwasm.so')
 _getsign = CDLL(_dllname).getSign
 _getsign.restype = POINTER(c_ubyte)

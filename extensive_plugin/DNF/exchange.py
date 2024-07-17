@@ -116,16 +116,16 @@ def DNFExRateTrend_(server, path):
 
 
 # 创建一个 Chrome WebDriver 对象
-
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')  # 无头模式，服务器没有图形界面这个必须
 chrome_options.add_argument('--disable-gpu')  # 不需要gpu加速
 chrome_options.add_argument('--no-sandbox')  # 这个配置很重要
 driver = webdriver.Chrome(options=chrome_options)
 
+
 async def DNFExRate_(server, productType):
     if server not in ReportRegions_2:
-        return None
+        return None, None
 
     # 加载网页
     url = f'https://www.yxdr.com/bijiaqi/dnf/{productType}/kua' + ReportRegions_2[server]  # 替换为你要截图的网页 URL

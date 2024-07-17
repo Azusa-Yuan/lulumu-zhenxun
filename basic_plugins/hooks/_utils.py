@@ -288,9 +288,9 @@ class AuthChecker:
                             and plugin_name not in ignore_rst_module
                         ):
                             self._flmt_g.start_cd(user_id)
-                            await bot.send_group_msg(
-                                group_id=group_id, message="群权限不足..."
-                            )
+                            # await bot.send_group_msg(
+                            #     group_id=group_id, message="群权限不足..."
+                            # )
                     except ActionFailed:
                         pass
                     if event.is_tome():

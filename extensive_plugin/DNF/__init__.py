@@ -14,9 +14,16 @@ __plugin_usage__ = """
 usage：
     比例趋势 跨2
 """.strip()
+__plugin_version__ = 0.1
 __plugin_des__ = "DNF"
 __plugin_cmd__ = ["比例趋势"]
 __plugin_type__ = ("一些工具",)
+__plugin_settings__ = {
+    "level": 5,
+    "default_status": True,
+    "limit_superuser": False,
+    'cmd': __plugin_cmd__
+}
 
 
 DNFExRateTrend = on_command("比例趋势", priority=5, block=True)
@@ -42,12 +49,9 @@ async def _(event: MessageEvent, arg: Message = CommandArg()):
     server = arg.extract_plain_text().strip()
     if not server:
         return
-    try:
-        url, base64_data = await DNFExRate_(server, 'youxibi')
-        if base64_data == None:
-            return
-    except:
-        await DNFExRate.finish("超时")
+    url, base64_data = await DNFExRate_(server, 'youxibi')
+    if base64_data == None:
+        return
 
     await DNFExRate.finish(image("base64://" + base64_data) + url)
 

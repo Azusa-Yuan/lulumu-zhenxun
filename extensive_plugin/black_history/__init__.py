@@ -163,7 +163,7 @@ async def _(
     file_path = os.path.join(IMAGE_PATH, qq)
     ID_max = len(os.listdir(file_path)) - 1
     if int(ID) > ID_max:
-        await send_img.finish("ID超出上限")
+        await delete_img.finish("ID超出上限")
     os.remove(os.path.join(file_path, ID+".jpg"))
     if int(ID_max) != int(ID):
         os.rename(os.path.join(file_path, str(ID_max)+".jpg"), os.path.join(file_path, ID+".jpg"))
@@ -214,7 +214,7 @@ async def _(bot: Bot, event: MessageEvent, state: T_State, arg: Message = Comman
             group_id = event.group_id
             info = await bot.get_group_member_info(
             group_id=int(group_id), user_id=int(qq) )
-            print(info)
+            # print(info)
             name = info.get("card", "") or info.get("nickname", "")
         except Exception as e:
             info = await bot.get_stranger_info(user_id=int(qq))
